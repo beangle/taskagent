@@ -23,11 +23,8 @@ private AgentChannel[string] agents;
 private AdminChannel[string] admins;
 private ServerSetting setting;
 
-void start(string[] args){
-  import std.file;
-  import std.path;
-  auto xmlContents = readXml(args[1]);
-  setting = ServerSetting.parse(xmlContents);
+int startServer(string xml, string[] args){
+  setting = ServerSetting.parse(xml);
   auto router = new URLRouter(setting.path);
   router.get("/ws", handleWebSockets(&handleWebSocketConnection));
   router.get("/call/:agent", &callAgent);
@@ -37,7 +34,7 @@ void start(string[] args){
   hs.bindAddresses = setting.ips;
 
   auto listener = listenHTTP(hs, router);
-  runApplication(&args);
+  return runApplication(&args);
 }
 
 /**

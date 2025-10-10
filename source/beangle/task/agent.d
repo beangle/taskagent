@@ -15,12 +15,8 @@ import core.time;
 import beangle.task.config;
 import beangle.util;
 
-int start(string[] args) {
-  if (args.length<2){
-    writeln("Usage: " ~ args[0] ~ " path/to/agent.xml");
-    return -1;
-  }
-  auto agent = Agent.parse(cast(string) read(expandTilde(args[1])));
+int startAgent(string xml, string[] args) {
+  auto agent = Agent.parse(xml);
   if (agent.serverURL !is null){
     runTask({
       try{
@@ -111,14 +107,14 @@ void serveSocket(Agent agent, WebSocket ws){
               std.file.remove(task.stdout);
             }
           }
-        }else if(txt.startsWith("{") && txt.endsWith("}")){
+        }else if (txt.startsWith("{") && txt.endsWith("}")){
           import std.json;
           JSONValue js = parseJSON(txt);
 
           auto id = js["id"].str;
           auto commands = new Commands(js["commands"].str);
           string[string] envs;
-          auto result = commands.execute(envs,expandTilde("~"));
+          auto result = commands.execute(envs, expandTilde("~"));
           JSONValue jj = ["id":id];
           jj.object["data"]=result[1];
           ws.send(jj.toString());

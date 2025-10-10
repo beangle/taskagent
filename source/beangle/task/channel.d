@@ -3,7 +3,6 @@ import vibe.http.websockets : WebSocket;
 import beangle.task;
 import beangle.util;
 
-
 //name -> channel
 private AgentChannel[string] agents;
 //id -> channel
