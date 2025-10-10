@@ -23,6 +23,7 @@ DateTime now(){
   auto st  = Clock.currTime();
   return DateTime(st.year, st.month, st.day, st.hour, st.minute, st.second);
 }
+
 unittest{
   int [] ints;
   ints ~= 1;

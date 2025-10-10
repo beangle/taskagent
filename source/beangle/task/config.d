@@ -368,7 +368,7 @@ unittest {
 </sas>
 `;
   auto setting = ServerSetting.parse(content);
-  assert(setting.agentPasswds.length == 2);
+  assert(setting.agentSecrets.length == 2);
   assert("agent2" in setting.agentSecrets);
   assert("/sastask" == setting.path);
   assert("changeit" == setting.secret);

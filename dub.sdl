@@ -13,4 +13,5 @@ targetType "executable"
 targetName "beangle-task"
 targetPath "target"
 
+mainSourceFile "source/app.d"
 toolchainRequirements dub=">=1.34.0" frontend=">=2.102.0" ldc=">=1.32.0"

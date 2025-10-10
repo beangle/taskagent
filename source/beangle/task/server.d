@@ -154,14 +154,20 @@ void handleWebSocketConnection(scope WebSocket socket){
           }
         }else {
           if (admin.agent !is null){
-            admin.agent.invoke(SocketCaller.create(admin), text);
+            if(text.startsWith("cd ") && text.indexOf(";") == -1){
+              admin.workdir = text[3..$].strip();
+              admin.send("set workdir " ~ admin.workdir);
+            }else{
+              auto prefix = "cd " ~ admin.workdir ~ ";";
+              admin.agent.invoke(SocketCaller.create(admin),prefix ~ text);
+            }
           }else {
-            admin.send("using @agentname commands ... or connect a exist agent using /connect ");
+            admin.send("using @agentname commands ... or connect a exist agent using /connect");
           }
         }
       }
     }else {
-        (cast(AgentChannel)channel).reply(text);
+      (cast(AgentChannel)channel).reply(text);
     }
   }
   close(channel);

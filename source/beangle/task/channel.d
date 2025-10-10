@@ -38,6 +38,8 @@ class AdminChannel : Channel{
 
   AgentChannel agent;
 
+  string workdir = "~";
+
   static AdminChannel create(string name, WebSocket socket){
     return new AdminChannel(nextChannelId(name), name, socket);
   }
@@ -143,7 +145,7 @@ class WebCaller : Caller{
     m_readMutex = new InterruptibleTaskMutex;
     m_readCondition = new InterruptibleTaskCondition(m_readMutex);
 
-    agent.invoke(this,commands);
+    agent.invoke(this, commands);
     m_readMutex.performLocked!({
       m_readCondition.wait(timeout);
     });
