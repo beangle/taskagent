@@ -137,7 +137,7 @@ class Task {
     lastExecuteAt = now().toISOString();
     import std.file;
     mkdirRecurse(this.workdir);
-    auto results = this.commands.execute(this.envs,this.workdir);
+    auto results = this.commands.execute(this.envs, this.workdir);
     if (this.stdout is null){
       writeln(results[1]);
     }else {
@@ -198,7 +198,7 @@ class Commands{
     this.lines = to!(immutable(string[])) (splitLines(cmds).map!(x=> strip(x)).filter!(x=> !x.empty && !startsWith(x, "#")).array());
   }
 
-  auto execute(string[string] envs,string workdir){
+  auto execute(string[string] envs, string workdir){
     import std.process;
     import std.typecons;
     import std.array : appender;
@@ -206,12 +206,12 @@ class Commands{
     foreach (command; lines){
       auto cmd = executeShell(command, envs, std.process.Config.none, size_t.max, workdir);
       if (cmd.status != 0) {
-        return tuple(cmd.status,cmd.output);
+        return tuple(cmd.status, cmd.output);
       } else {
         buf.put(cmd.output);
       }
     }
-    return tuple(0,buf.data);
+    return tuple(0, buf.data);
   }
 }
 public static Task parseTask(string contents){
@@ -260,7 +260,7 @@ public static Task parseTask(T)(ref DOMEntity!T t){
   }
 
   string stdout = attrs.get("stdout", workdir ~ "/" ~ name ~ ".out");
-  stdout = expandTilde(replace(stdout,"${task_name}",name));
+  stdout = expandTilde(replace(stdout, "${task_name}", name));
   auto envElems = children(t, "env");
   string[string] envs;
   envs["task_name"] = name;
@@ -327,7 +327,7 @@ class ServerSetting{
   string secret;
   string[string] agentSecrets;
 
-  this(string[] ips, ushort port, string path,string secret,string[string] agentSecrets) {
+  this(string[] ips, ushort port, string path, string secret, string[string] agentSecrets) {
     this.ips = ips;
     this.port = port;
     this.path = path;
@@ -352,7 +352,7 @@ class ServerSetting{
 
     import beangle.xml;
     string[string] agentPasswds;
-    foreach(entry;children(dom, "agent")){
+    foreach (entry; children(dom, "agent")){
       auto agentAttrs = getAttrs(entry);
       agentPasswds[agentAttrs["name"]] = agentAttrs["secret"];
     }

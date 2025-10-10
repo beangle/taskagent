@@ -48,6 +48,18 @@ class AdminChannel : Channel{
     super(id, name, socket);
   }
 
+  void changeWorkdir(string path){
+    import std.algorithm;
+    if (path.startsWith("/") || path == "~"){
+      this.workdir = path;
+    }else {
+      if (path.endsWith("/")){
+        this.workdir = this.workdir ~ "/" ~ path[0..$-1];
+      }else {
+        this.workdir = this.workdir ~ "/" ~ path;
+      }
+    }
+  }
   void setAgent(AgentChannel agent){
     this.agent = agent;
   }
