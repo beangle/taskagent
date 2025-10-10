@@ -4,7 +4,6 @@ export TASK_HOME=`cd "$PRGDIR" >/dev/null; pwd`
 version=`grep "version " -R dub.sdl |awk 'NR==1{gsub(/"/,"");print $2}'`
 
 mk_artifact(){
-  cd $1
   arch=`arch`
   targetName=`grep "targetName " -R dub.sdl |awk 'NR==1{gsub(/"/,"");print $2}'`
   rm -rf target/$targetName-$version-$arch.bin
@@ -19,17 +18,14 @@ mk_artifact(){
 
 dub clean
 dub build --build=release-nobounds --compiler=ldc2
-mk_artifact "agent"
-mk_artifact "server"
+mk_artifact
 
 cd $TASK_HOME
 rm -rf target
 mkdir -p target
 
 cd ~/.m2/repository
-zip  $TASK_HOME/target/beangle-task-$version.$arch.zip org/beangle/task/beangle-task-agent/$version/beangle-task-agent-$version-$arch.bin \
-org/beangle/task/beangle-task-agent/$version/beangle-task-agent-$version-$arch.bin.sha1 \
-org/beangle/task/beangle-task-server/$version/beangle-task-server-$version-$arch.bin \
-org/beangle/task/beangle-task-server/$version/beangle-task-server-$version-$arch.bin.sha1
+zip  $TASK_HOME/target/beangle-task-$version.$arch.zip org/beangle/task/beangle-task/$version/beangle-task-$version-$arch.bin \
+org/beangle/task/beangle-task/$version/beangle-task-$version-$arch.bin.sha1
 
 gpg -ab $TASK_HOME/target/beangle-task-$version.$arch.zip
